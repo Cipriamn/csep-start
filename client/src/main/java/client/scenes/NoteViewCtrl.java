@@ -10,10 +10,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.web.WebView;
 
 
@@ -25,6 +22,8 @@ public class NoteViewCtrl implements Initializable {
   public ObservableList<Note> noteData;
 
   @FXML
+  private TextField titleField;
+  @FXML
   private TextArea textArea;
   @FXML
   private WebView webView;
@@ -32,9 +31,11 @@ public class NoteViewCtrl implements Initializable {
   private TableView<Note> tableView;
   @FXML
   private TableColumn<Note, String> colNote;
-  private final ServerUtils server;
   @FXML
-  private Button add;
+  private Button editTitleButton;
+  private final ServerUtils server;
+
+
 
   private final PrimaryNoteCtrl mainCtrl;
 
@@ -54,10 +55,12 @@ public class NoteViewCtrl implements Initializable {
       if (oldValue != null) {
         // Save the changes made in the TextArea to the oldValue
         oldValue.markdown = textArea.getText();
+        oldValue.title = titleField.getText();
       }
       if (newValue != null) {
         // Update the TextArea to show the markdown content of the newly selected item
         textArea.setText(newValue.markdown);
+        titleField.setText(newValue.title);
       }
     });
   }
@@ -66,7 +69,7 @@ public class NoteViewCtrl implements Initializable {
     noteData = FXCollections.observableList(notes);
     tableView.setItems(noteData);
   }
-  public void addQuote() {
+  public void addNote() {
     mainCtrl.showAdd();
   }
 

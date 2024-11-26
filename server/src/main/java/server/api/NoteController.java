@@ -2,6 +2,7 @@ package server.api;
 
 import commons.Note;
 
+import commons.Quote;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,8 +39,12 @@ public class NoteController {
     Note saved = noteRepository.save(note);
     return ResponseEntity.ok(saved);
   }
-  private static boolean isNullOrEmpty(String s) {
-    return s == null || s.isEmpty();
+  @GetMapping("/{id}")
+  public ResponseEntity<Note> getById(@PathVariable("id") long id) {
+    if (id < 0 || !noteRepository.existsById(id)) {
+      return ResponseEntity.badRequest().build();
+    }
+    return ResponseEntity.ok(noteRepository.findById(id).get());
   }
 
 }
